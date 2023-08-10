@@ -75,10 +75,12 @@ app.layout = html.Div([
 
 @app.callback(
     Output(component_id='output-text',component_property='value'),
-    Input(component_id='upload',component_property='value'),
+    Input('upload','contents'),
+    State('upload', 'filename'),
+    State('upload', 'last_modified')
     )
 
-def update_upload_container(file):
+def update_upload_container(file,file_name):
     if fnmatch.fnmatch(file_name,'*.hkl*'):
         
         h = indices[0]
