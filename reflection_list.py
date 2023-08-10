@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
+# In[22]:
 
 
 ### This program is to visualize the Reflection list after it is saved with Dashbaord. ###
@@ -34,18 +34,22 @@ app.style = {'textAlign':'center','color':'#503D36','font-size':24}
 
 app.layout = html.Div([
     html.H1("Reflection List"),
+    
+    
                        
-    html.Div([html.Label("Where is your file? "),
-             dcc.Input(
-             id='file-location',
-            value='C:',
-            placeholder=cwd)]),
-    html.Div([html.Label("select the file: "),
-            dcc.Dropdown(
-            id='dropdown',
-            options=os.listdir(cwd),
-            value='file',
-            placeholder='Select a file')]),
+    html.Div([html.Label("Upload your file here"),
+                        dcc.Upload(
+                            id='upload',
+                        style={
+                        'width': '100%',
+                        'height': '60px',
+                        'lineHeight': '60px',
+                        'borderWidth': '1px',
+                        'borderStyle': 'dashed',
+                        'borderRadius': '5px',
+                        'textAlign': 'center',
+                        'margin': '10px'},
+                        multiple=False)]),
     
     html.Div([html.Label("h: "),
              dcc.Input(
@@ -64,63 +68,17 @@ app.layout = html.Div([
             placeholder=0)]),
               
     html.Div([
-        html.Div(id='output-text',className='file',style={'display':'flex'}),
+        html.Div(id='output-text',className='new_file',style={'display':'flex'}),
         html.Div(id='output-hkl',className='HKL',style={'display':'flex'}),
         html.Div(id='output-container', className='chart-grid', style={'display':'flex'})])
-        
 ])
 
 @app.callback(
-    Output(component_id='output-text',component_property='children'),
-    Input(component_id='file-location',component_property='value'),
+    Output(component_id='output-text',component_property='value'),
+    Input(component_id='upload',component_property='value'),
     )
 
-def update_input_container(file_location):
-    try: 
-        os.chdir(file_location)
-
-        os.chdir(file_location)
-        cwd = os.getcwd()
-
-        return cwd
-    except:
-        return 'Please, verify the path'
-
-@app.callback(
-    Output(component_id='dropdown',component_property='options'),
-    Input(component_id='output-text',component_property='children'),
-    )
-
-def set_dropdown_container(cwd):
-    if cwd=='Please, verify the path':
-        return []
-    else:
-
-        files = os.listdir(cwd)
-
-        return [{'label':i,'value':i} for i in files]
-
-@app.callback(
-    Output(component_id='output-hkl', component_property='children'),
-    [Input(component_id='h',component_property='value'),
-     Input(component_id='k',component_property='value'),
-     Input(component_id='l',component_property='value')]
-     )
-
-def update_hkl_container(h,k,l):
-    if h == '' or k == '' or l == '' or h == '-' or k == '-' or l == '-':
-        return [0,0,0]
-    else:
-        indices = [int(h),int(k),int(l)]
-        return indices
-
-@app.callback(
-    Output(component_id='output-container', component_property='children'),
-    [Input(component_id='dropdown',component_property='value'),
-     Input(component_id='output-hkl',component_property='children')]
-     )
-
-def update_output_container(file_name,indices):
+def update_upload_container(file):
     if fnmatch.fnmatch(file_name,'*.hkl*'):
         
         h = indices[0]
@@ -142,10 +100,32 @@ def update_output_container(file_name,indices):
             line = line3
             new_writing.write(line)
         new_writing.close()
-
-
         
+        return new_file 
 
+
+@app.callback(
+    Output(component_id='output-hkl', component_property='children'),
+    [Input(component_id='h',component_property='value'),
+     Input(component_id='k',component_property='value'),
+     Input(component_id='l',component_property='value')]
+     )
+
+def update_hkl_container(h,k,l):
+    if h == '' or k == '' or l == '' or h == '-' or k == '-' or l == '-':
+        return [0,0,0]
+    else:
+        indices = [int(h),int(k),int(l)]
+        return indices
+
+@app.callback(
+    Output(component_id='output-container', component_property='children'),
+    [Input(component_id='output-text',component_property='value'),
+     Input(component_id='output-hkl',component_property='children')]
+     )
+
+def update_output_container(file_name,indices):
+    if fnmatch.fnmatch(file_name,'*.txt*'):
         
         data = pd.read_fwf(new_file)
         
