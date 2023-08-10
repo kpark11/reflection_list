@@ -41,7 +41,7 @@ app.layout = html.Div([
                         dcc.Upload(
                             id='upload',
                         style={
-                        'width': '100%',
+                        'width': '200px',
                         'height': '60px',
                         'lineHeight': '60px',
                         'borderWidth': '1px',
