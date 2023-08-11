@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[15]:
+# In[17]:
 
 
 ### This program is to visualize the Reflection list after it is saved with Dashbaord. ###
@@ -60,7 +60,7 @@ app.layout = html.Div([
               
     html.Div([
         html.Div(id='output-text',className='file',style={'display':'flex'}),
-        html.Div(id='output-file',className='new_content',style-{'display':'flex'}),
+        html.Div(id='output-file',className='new-content',style={'display':'flex'}),
         html.Div(id='output-hkl',className='HKL',style={'display':'flex'}),
         html.Div(id='output-container', className='chart-grid', style={'display':'flex'})])
 ])
@@ -96,7 +96,7 @@ def update_upload_container(file_content,file_name):
             new_writing.write(line)
         new_writing.close()
 
-        return new_file
+        return new_file,new_writing
     else:
         return "Upload .hkl file, please"
 
