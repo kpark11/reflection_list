@@ -74,31 +74,31 @@ app.layout = html.Div([
 
 def update_upload_container(file_content,file_name):
     decoded_file_content = base64.b64decode(file_content)
-        if fnmatch.fnmatch(file_name,'*.hkl*'):
-        
-            h = indices[0]
-            k = indices[1]
-            l = indices[2]
+    if fnmatch.fnmatch(file_name,'*.hkl*'):
 
-            writing = open(decoded_file_content,'r')
-            lines = writing.readlines()
-            writing.close()
-            
-            del lines[:9]
+        h = indices[0]
+        k = indices[1]
+        l = indices[2]
 
-            new_file = re.sub('\.hkl','_cleaned.txt',file_name)
-            new_writing = open(new_file,'w+')
-            for line in lines:
-                line1 = re.sub('\(snan\)',' 0.000 ',line)
-                line2 = re.sub('nan',' ',line1)
-                line3 = re.sub('\!','',line2)
-                line = line3
-                new_writing.write(line)
-            new_writing.close()
+        writing = open(decoded_file_content,'r')
+        lines = writing.readlines()
+        writing.close()
 
-            return new_file
-        else:
-            return "Upload .hkl file, please"
+        del lines[:9]
+
+        new_file = re.sub('\.hkl','_cleaned.txt',file_name)
+        new_writing = open(new_file,'w+')
+        for line in lines:
+            line1 = re.sub('\(snan\)',' 0.000 ',line)
+            line2 = re.sub('nan',' ',line1)
+            line3 = re.sub('\!','',line2)
+            line = line3
+            new_writing.write(line)
+        new_writing.close()
+
+        return new_file
+    else:
+        return "Upload .hkl file, please"
 
 
 @app.callback(
