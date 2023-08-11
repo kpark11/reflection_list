@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[14]:
+# In[15]:
 
 
 ### This program is to visualize the Reflection list after it is saved with Dashbaord. ###
@@ -59,30 +59,31 @@ app.layout = html.Div([
             placeholder=0)]),
               
     html.Div([
-        html.Div(id='output-text',className='new_file',style={'display':'flex'}),
+        html.Div(id='output-text',className='file',style={'display':'flex'}),
+        html.Div(id='output-file',className='new_content',style-{'display':'flex'}),
         html.Div(id='output-hkl',className='HKL',style={'display':'flex'}),
         html.Div(id='output-container', className='chart-grid', style={'display':'flex'})])
 ])
 
 @app.callback(
-    Output(component_id='output-text',component_property='value'),
+    [Output(component_id='output-text',component_property='value'),
+     Output(component_id='output-file',component_property='value')],
     [Input('upload', 'contents'),
-    State('upload', 'filename'),
-    State('upload', 'last_modified')
+    Input('upload', 'filename')
     ])
 
-def update_upload_container(file_name):
-    
+def update_upload_container(file_content,file_name):
+    decoded_file_content = base64.b64decode(file_content)
         if fnmatch.fnmatch(file_name,'*.hkl*'):
         
             h = indices[0]
             k = indices[1]
             l = indices[2]
 
-            writing = open(file_name,'r')
+            writing = open(decoded_file_content,'r')
             lines = writing.readlines()
             writing.close()
-
+            
             del lines[:9]
 
             new_file = re.sub('\.hkl','_cleaned.txt',file_name)
