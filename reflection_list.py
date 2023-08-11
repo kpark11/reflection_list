@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[22]:
+# In[14]:
 
 
 ### This program is to visualize the Reflection list after it is saved with Dashbaord. ###
@@ -37,19 +37,10 @@ app.layout = html.Div([
     
     
                        
-    html.Div([html.Label("Upload your file here"),
-                        dcc.Upload(
-                            id='upload',
-                        style={
-                        'width': '200px',
-                        'height': '60px',
-                        'lineHeight': '60px',
-                        'borderWidth': '1px',
-                        'borderStyle': 'dashed',
-                        'borderRadius': '5px',
-                        'textAlign': 'center',
-                        'margin': '10px'},
-                        multiple=False)]),
+    html.Div([html.Label("Upload here"),
+              dcc.Upload('Upload File',
+                         id='upload',
+                         )]),
     
     html.Div([html.Label("h: "),
              dcc.Input(
@@ -75,35 +66,38 @@ app.layout = html.Div([
 
 @app.callback(
     Output(component_id='output-text',component_property='value'),
-    Input('upload','contents'),
+    [Input('upload', 'contents'),
     State('upload', 'filename'),
     State('upload', 'last_modified')
-    )
+    ])
 
-def update_upload_container(file,file_name):
-    if fnmatch.fnmatch(file_name,'*.hkl*'):
+def update_upload_container(file_name):
+    
+        if fnmatch.fnmatch(file_name,'*.hkl*'):
         
-        h = indices[0]
-        k = indices[1]
-        l = indices[2]
-        
-        writing = open(file_name,'r')
-        lines = writing.readlines()
-        writing.close()
+            h = indices[0]
+            k = indices[1]
+            l = indices[2]
 
-        del lines[:9]
+            writing = open(file_name,'r')
+            lines = writing.readlines()
+            writing.close()
 
-        new_file = re.sub('\.hkl','_cleaned.txt',file_name)
-        new_writing = open(new_file,'w+')
-        for line in lines:
-            line1 = re.sub('\(snan\)',' 0.000 ',line)
-            line2 = re.sub('nan',' ',line1)
-            line3 = re.sub('\!','',line2)
-            line = line3
-            new_writing.write(line)
-        new_writing.close()
-        
-        return new_file 
+            del lines[:9]
+
+            new_file = re.sub('\.hkl','_cleaned.txt',file_name)
+            new_writing = open(new_file,'w+')
+            for line in lines:
+                line1 = re.sub('\(snan\)',' 0.000 ',line)
+                line2 = re.sub('nan',' ',line1)
+                line3 = re.sub('\!','',line2)
+                line = line3
+                new_writing.write(line)
+            new_writing.close()
+
+            return new_file
+        else:
+            return "Upload .hkl file, please"
 
 
 @app.callback(
@@ -127,7 +121,29 @@ def update_hkl_container(h,k,l):
      )
 
 def update_output_container(file_name,indices):
-    if fnmatch.fnmatch(file_name,'*.txt*'):
+    
+    if fnmatch.fnmatch(file_name,'*.hkl*'):
+        
+        h = indices[0]
+        k = indices[1]
+        l = indices[2]
+        
+        writing = open(file_name,'r')
+        lines = writing.readlines()
+        writing.close()
+
+        del lines[:9]
+
+        new_file = re.sub('\.hkl','_cleaned.txt',file_name)
+        new_writing = open(new_file,'w+')
+        for line in lines:
+            line1 = re.sub('\(snan\)',' 0.000 ',line)
+            line2 = re.sub('nan',' ',line1)
+            line3 = re.sub('\!','',line2)
+            line = line3
+            new_writing.write(line)
+        new_writing.close()
+        
         
         data = pd.read_fwf(new_file)
         
