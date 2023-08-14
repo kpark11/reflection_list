@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[9]:
+# In[73]:
 
 
 ### This program is to visualize the Reflection list after it is saved with Dashbaord. ###
@@ -9,6 +9,7 @@
 
 import dash
 from dash import dcc
+from dash import State
 from dash import html
 from dash.dependencies import Input, Output
 import pandas as pd
@@ -21,9 +22,14 @@ import sys
 import fnmatch
 import matplotlib.pyplot as plt
 import base64
-from urllib.parse import quote as urlquote
 
-
+cwd = os.getcwd()
+print(cwd)
+file_path = cwd+'\download'
+try:
+    os.mkdir(file_path)
+except:
+    print('already exists')
 
 
 app = dash.Dash(__name__)
@@ -41,7 +47,7 @@ app.layout = html.Div([
                        
     html.Div([html.Label("Upload here"),
               dcc.Upload(
-                    id="upload-data",
+                    id="upload",
                     children=html.Div(
                         ["Drag and drop or click to select a file to upload."]
                     ),
@@ -80,45 +86,47 @@ app.layout = html.Div([
 ])
 
 
+def save_file(contents,name):
+    new_path = os.path.join(file_path, name)
+    try:
+        data = contents.encode("utf8").split(b";base64,")[1]
+        with open(new_path, "wb") as fp:
+            fp.write(base64.decodebytes(data))
+        return str(new_path)
+    except:
+        return str(new_path)
 
-def save_file(name, content):
-    data = content.encode("utf8").split(b";base64,")[1]
-    with open(os.path.join(file_path, name), "wb") as fp:
-        fp.write(base64.decodebytes(data))
 
-@app.callback(
-     Output(component_id='output-file',component_property='children'),
-    [Input('upload', 'contents'),
-    Input('upload', 'filename')
-    ])
-
-def update_upload_container(file_content,file_name):
-    if fnmatch.fnmatch(file_name,'*.hkl*'):
-        decoded_file = save_file(file_name,file_content)
         
-        h = indices[0]
-        k = indices[1]
-        l = indices[2]
+@app.callback(
+    Output(component_id='output-file',component_property='children'),
+    [Input('upload','contents'),
+     State('upload','filename')]
+    )
 
-        writing = open(decoded_file,'r')
-        lines = writing.readlines()
-        writing.close()
+def update_upload_container(contents,name):    
+    try:
+        if '.hkl' in name:
+            new_path = save_file(contents,name)
+            writing = open(new_path,'r')
+            lines = writing.readlines()
+            writing.close()
+            del lines[:9]
 
-        del lines[:9]
+            new_file = re.sub('\.hkl','_cleaned.txt',name)
+            new_file_path = os.path.join(file_path, new_file)
+            new_writing = open(new_file_path,'w+')
+            for line in lines:
+                line1 = re.sub('\(snan\)',' 0.000 ',line)
+                line2 = re.sub('nan',' ',line1)
+                line3 = re.sub('\!','',line2)
+                line = line3
+                new_writing.write(line)
+            new_writing.close()
 
-        new_file = re.sub('\.hkl','_cleaned.txt',file_name)
-        new_writing = open(new_file,'w+')
-        for line in lines:
-            line1 = re.sub('\(snan\)',' 0.000 ',line)
-            line2 = re.sub('nan',' ',line1)
-            line3 = re.sub('\!','',line2)
-            line = line3
-            new_writing.write(line)
-        new_writing.close()
-
-        return new_file
-    else:
-        return "Upload .hkl file, please"
+            return new_file_path
+    except:
+        return None
 
 
 @app.callback(
@@ -141,134 +149,111 @@ def update_hkl_container(h,k,l):
      Input(component_id='output-hkl',component_property='children')]
      )
 
-def update_output_container(file_name,indices):
-    
-    if fnmatch.fnmatch(file_name,'*.hkl*'):
-        
-        h = indices[0]
-        k = indices[1]
-        l = indices[2]
-        
-        writing = open(file_name,'r')
-        lines = writing.readlines()
-        writing.close()
+def update_output_container(file,indices):
+    try:
+        if '_cleaned.txt' in file:
+            data = pd.read_fwf(file)
 
-        del lines[:9]
+            header = ['Pxx','Pxy','Pxz','Pyx','Pyy','Pyz','Pzx','Pzy','Pzz']
+            h1 = str(h)
+            k1 = str(k)
+            l1 = str(l)
 
-        new_file = re.sub('\.hkl','_cleaned.txt',file_name)
-        new_writing = open(new_file,'w+')
-        for line in lines:
-            line1 = re.sub('\(snan\)',' 0.000 ',line)
-            line2 = re.sub('nan',' ',line1)
-            line3 = re.sub('\!','',line2)
-            line = line3
-            new_writing.write(line)
-        new_writing.close()
-        
-        
-        data = pd.read_fwf(new_file)
-        
-        
-        header = ['Pxx','Pxy','Pxz','Pyx','Pyy','Pyz','Pzx','Pzy','Pzz']
-        h1 = str(h)
-        k1 = str(k)
-        l1 = str(l)
-        
-        hkl = data.loc[(data['h']==h) & (data['k']==k) & (data['l']==l)].index
-        
-        if len(hkl)==3:
-            hkl0 = hkl[0]
-            hkl1 = hkl[1]
-            hkl2 = hkl[2]
-            
-            mas = data[header].loc[hkl0].reset_index()
-            q = data['q'].loc[hkl0]
-            q = str(q)
-            mas1 = data[header].loc[hkl1].reset_index()
-            q1 = data['q'].loc[hkl1]
-            q1 = str(q1)
-            mas2 = data[header].loc[hkl2].reset_index()
-            q2 = data['q'].loc[hkl2]
-            q2 = str(q2)
+            hkl = data.loc[(data['h']==h) & (data['k']==k) & (data['l']==l)].index
 
-            y = mas.values
-            y = list(y[:,1])
-            y1 = mas1.values
-            y1 = list(y1[:,1])
-            y2 = mas2.values
-            y2 = list(y2[:,1])
-            
-            bar_plot1 = dcc.Graph(figure=px.bar(y, 
-                x=header,
-                y=y,
-                title=str([h1+','+k1+','+l1+' and q = '+q])))
-            
-            bar_plot2 = dcc.Graph(figure=px.bar(y1, 
-                x=header,
-                y=y1,
-                title=str([h1+','+k1+','+l1+' and q = ' +q1])))
-            
-            bar_plot3 = dcc.Graph(figure=px.bar(y2, 
-                x=header,
-                y=y2,
-                title=str([h1+','+k1+','+l1+' and q = '+q2])))
-            
-            return html.Div(className='chart-grid',children=[html.Div(bar_plot1),html.Div(bar_plot2),html.Div(bar_plot3)],style={'display':'flex'})
-            
-        
-        elif len(hkl)==2:
-            hkl0 = int(hkl[0])
-            hkl1 = int(hkl[1])
-            
-            mas = data[header].loc[hkl0].reset_index()
-            q = data['q'].loc[hkl0]
-            q = str(q)
-            mas1 = data[header].loc[hkl1].reset_index()
-            q1 = data['q'].loc[hkl1]
-            q1 = str(q1)
-            
-            y = mas.values
-            y = list(y[:,1])
-            y1 = mas1.values
-            y1 = list(y1[:,1])
-                    
-            bar_plot1 = dcc.Graph(figure=px.bar(y, 
-                x=header,
-                y=y,
-                title=str([h1+','+k1+','+l1+' and q = '+q])))
-            
-            bar_plot2 = dcc.Graph(figure=px.bar(y1, 
-                x=header,
-                y=y1,
-                title=str([h1+','+k1+','+l1+' and q = '+q1])))
-            
-            
-            return html.Div(className='chart-grid',children=[html.Div(bar_plot1),html.Div(bar_plot2)],style={'display':'flex'})
-        
-        elif len(hkl)==1:
-            
-            mas = data[header].loc[hkl].reset_index()            
-            q = data['q'].loc[hkl]
-            q = q.values
-            q = str(q)
-            
-            y = mas.to_numpy()
-            y = list(y[0,1:])
-                        
-            bar_plot1 = dcc.Graph(figure=px.bar(y, 
-                x=header,
-                y=y,
-                title=str([h1+','+k1+','+l1+' and q = '+q])))
+            if len(hkl)==3:
+                hkl0 = hkl[0]
+                hkl1 = hkl[1]
+                hkl2 = hkl[2]
 
-          
-            return html.Div(className='chart-grid',children=html.Div(bar_plot1),style={'display':'flex'})
+                mas = data[header].loc[hkl0].reset_index()
+                q = data['q'].loc[hkl0]
+                q = str(q)
+                mas1 = data[header].loc[hkl1].reset_index()
+                q1 = data['q'].loc[hkl1]
+                q1 = str(q1)
+                mas2 = data[header].loc[hkl2].reset_index()
+                q2 = data['q'].loc[hkl2]
+                q2 = str(q2)
 
-        else:
-            None
+                y = mas.values
+                y = list(y[:,1])
+                y1 = mas1.values
+                y1 = list(y1[:,1])
+                y2 = mas2.values
+                y2 = list(y2[:,1])
+
+                bar_plot1 = dcc.Graph(figure=px.bar(y, 
+                    x=header,
+                    y=y,
+                    title=str([h1+','+k1+','+l1+' and q = '+q])))
+
+                bar_plot2 = dcc.Graph(figure=px.bar(y1, 
+                    x=header,
+                    y=y1,
+                    title=str([h1+','+k1+','+l1+' and q = ' +q1])))
+
+                bar_plot3 = dcc.Graph(figure=px.bar(y2, 
+                    x=header,
+                    y=y2,
+                    title=str([h1+','+k1+','+l1+' and q = '+q2])))
+
+                return html.Div(className='chart-grid',children=[html.Div(bar_plot1),html.Div(bar_plot2),html.Div(bar_plot3)],style={'display':'flex'})
+
+
+            elif len(hkl)==2:
+                hkl0 = int(hkl[0])
+                hkl1 = int(hkl[1])
+
+                mas = data[header].loc[hkl0].reset_index()
+                q = data['q'].loc[hkl0]
+                q = str(q)
+                mas1 = data[header].loc[hkl1].reset_index()
+                q1 = data['q'].loc[hkl1]
+                q1 = str(q1)
+
+                y = mas.values
+                y = list(y[:,1])
+                y1 = mas1.values
+                y1 = list(y1[:,1])
+
+                bar_plot1 = dcc.Graph(figure=px.bar(y, 
+                    x=header,
+                    y=y,
+                    title=str([h1+','+k1+','+l1+' and q = '+q])))
+
+                bar_plot2 = dcc.Graph(figure=px.bar(y1, 
+                    x=header,
+                    y=y1,
+                    title=str([h1+','+k1+','+l1+' and q = '+q1])))
+
+
+                return html.Div(className='chart-grid',children=[html.Div(bar_plot1),html.Div(bar_plot2)],style={'display':'flex'})
+
+            elif len(hkl)==1:
+
+                mas = data[header].loc[hkl].reset_index()            
+                q = data['q'].loc[hkl]
+                q = q.values
+                q = str(q)
+
+                y = mas.to_numpy()
+                y = list(y[0,1:])
+
+                bar_plot1 = dcc.Graph(figure=px.bar(y, 
+                    x=header,
+                    y=y,
+                    title=str([h1+','+k1+','+l1+' and q = '+q])))
+
+
+                return html.Div(className='chart-grid',children=html.Div(bar_plot1),style={'display':'flex'})
+
+            else:
+                None
 
 
     
-    else:
+    except:
         None
     
     
