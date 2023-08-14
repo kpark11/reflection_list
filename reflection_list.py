@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[19]:
+# In[9]:
 
 
 ### This program is to visualize the Reflection list after it is saved with Dashbaord. ###
@@ -20,17 +20,15 @@ import re
 import sys
 import fnmatch
 import matplotlib.pyplot as plt
+import base64
+from urllib.parse import quote as urlquote
 
 
-UPLOAD_DIRECTORY = "/files/uploaded_files"
-
-if not os.path.exists(UPLOAD_DIRECTORY):
-    os.makedirs(UPLOAD_DIRECTORY)
 
 
 app = dash.Dash(__name__)
 
-#server = app.server
+server = app.server
 
 app.title = "Reflection List"
 app.style = {'textAlign':'center','color':'#503D36','font-size':24}
@@ -76,53 +74,33 @@ app.layout = html.Div([
             placeholder=0)]),
               
     html.Div([
-        html.Div(id='output-text',className='file',style={'display':'flex'}),
-        html.Div(id='output-file',className='new-content',style={'display':'flex'}),
+        html.Div(id='output-file',className='file',style={'display':'flex'}),
         html.Div(id='output-hkl',className='HKL',style={'display':'flex'}),
         html.Div(id='output-container', className='chart-grid', style={'display':'flex'})])
 ])
 
 
+
 def save_file(name, content):
-    """Decode and store a file uploaded with Plotly Dash."""
     data = content.encode("utf8").split(b";base64,")[1]
-    with open(os.path.join(UPLOAD_DIRECTORY, name), "wb") as fp:
+    with open(os.path.join(file_path, name), "wb") as fp:
         fp.write(base64.decodebytes(data))
 
-
-def uploaded_files():
-    """List the files in the upload directory."""
-    files = []
-    for filename in os.listdir(UPLOAD_DIRECTORY):
-        path = os.path.join(UPLOAD_DIRECTORY, filename)
-        if os.path.isfile(path):
-            files.append(filename)
-    return files
-
-
-def file_download_link(filename):
-    """Create a Plotly Dash 'A' element that downloads a file from the app."""
-    location = "/download/{}".format(urlquote(filename))
-    return html.A(filename, href=location)
-
-
 @app.callback(
-    [Output(component_id='output-text',component_property='value'),
-     Output(component_id='output-file',component_property='children')],
+     Output(component_id='output-file',component_property='children'),
     [Input('upload', 'contents'),
     Input('upload', 'filename')
     ])
 
 def update_upload_container(file_content,file_name):
-    decoded_file_content = base64.b64decode(file_content)
     if fnmatch.fnmatch(file_name,'*.hkl*'):
-        save_file(file_name,decoded_file_content)
-
+        decoded_file = save_file(file_name,file_content)
+        
         h = indices[0]
         k = indices[1]
         l = indices[2]
 
-        writing = open(decoded_file_content,'r')
+        writing = open(decoded_file,'r')
         lines = writing.readlines()
         writing.close()
 
@@ -138,7 +116,7 @@ def update_upload_container(file_content,file_name):
             new_writing.write(line)
         new_writing.close()
 
-        return new_file,new_writing
+        return new_file
     else:
         return "Upload .hkl file, please"
 
@@ -159,7 +137,7 @@ def update_hkl_container(h,k,l):
 
 @app.callback(
     Output(component_id='output-container', component_property='children'),
-    [Input(component_id='output-text',component_property='value'),
+    [Input(component_id='output-file',component_property='children'),
      Input(component_id='output-hkl',component_property='children')]
      )
 
