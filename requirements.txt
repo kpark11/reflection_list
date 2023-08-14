@@ -5,5 +5,4 @@ numpy==1.21.6
 plotly==5.9.0
 matplotlib==3.5.3
 gunicorn==19.7.1 
-base64
 
