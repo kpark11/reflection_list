@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[80]:
+# In[99]:
 
 
 ### This program is to visualize the Reflection list after it is saved with Dashbaord. ###
@@ -163,7 +163,6 @@ def update_output_container(file,indices):
 
             hkl = data.loc[(data['h']==h) & (data['k']==k) & (data['l']==l)].index
             
-            
             if len(hkl)==3:
                 hkl0 = hkl[0]
                 hkl1 = hkl[1]
@@ -189,19 +188,19 @@ def update_output_container(file,indices):
                 bar_plot1 = dcc.Graph(figure=px.bar(y, 
                     x=header,
                     y=y,
-                    title=str([h1+','+k1+','+l1+' and q = '+q]),
+                    title=str(h1+','+k1+','+l1+' and q = ' +q),
                     labels={'x': '', 'y':''}))
 
                 bar_plot2 = dcc.Graph(figure=px.bar(y1, 
                     x=header,
                     y=y1,
-                    title=str([h1+','+k1+','+l1+' and q = ' +q1]),
+                    title=str(h1+','+k1+','+l1+' and q = ' +q1),
                     labels={'x': '', 'y':''}))
                 
-                bar_plot2 = dcc.Graph(figure=px.bar(y2, 
+                bar_plot3 = dcc.Graph(figure=px.bar(y2, 
                     x=header,
                     y=y1,
-                    title=str([h1+','+k1+','+l1+' and q = ' +q2]),
+                    title=str(h1+','+k1+','+l1+' and q = ' +q2),
                     labels={'x': '', 'y':''}))
 
                 return html.Div(className='chart-grid',children=[html.Div(bar_plot1),html.Div(bar_plot2),html.Div(bar_plot3)],style={'display':'flex'})
