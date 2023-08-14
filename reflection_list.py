@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[73]:
+# In[79]:
 
 
 ### This program is to visualize the Reflection list after it is saved with Dashbaord. ###
@@ -153,14 +153,17 @@ def update_output_container(file,indices):
     try:
         if '_cleaned.txt' in file:
             data = pd.read_fwf(file)
-
             header = ['Pxx','Pxy','Pxz','Pyx','Pyy','Pyz','Pzx','Pzy','Pzz']
+            h = indices[0]
+            k = indices[1]
+            l = indices[2]
             h1 = str(h)
             k1 = str(k)
             l1 = str(l)
 
             hkl = data.loc[(data['h']==h) & (data['k']==k) & (data['l']==l)].index
-
+            
+            
             if len(hkl)==3:
                 hkl0 = hkl[0]
                 hkl1 = hkl[1]
@@ -232,7 +235,7 @@ def update_output_container(file,indices):
 
             elif len(hkl)==1:
 
-                mas = data[header].loc[hkl].reset_index()            
+                mas = data[header].loc[hkl].reset_index()       
                 q = data['q'].loc[hkl]
                 q = q.values
                 q = str(q)
