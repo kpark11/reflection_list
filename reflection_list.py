@@ -189,17 +189,20 @@ def update_output_container(file,indices):
                 bar_plot1 = dcc.Graph(figure=px.bar(y, 
                     x=header,
                     y=y,
-                    title=str([h1+','+k1+','+l1+' and q = '+q])))
+                    title=str([h1+','+k1+','+l1+' and q = '+q]),
+                    labels={'x': '', 'y':''}))
 
                 bar_plot2 = dcc.Graph(figure=px.bar(y1, 
                     x=header,
                     y=y1,
-                    title=str([h1+','+k1+','+l1+' and q = ' +q1])))
-
-                bar_plot3 = dcc.Graph(figure=px.bar(y2, 
+                    title=str([h1+','+k1+','+l1+' and q = ' +q1]),
+                    labels={'x': '', 'y':''}))
+                
+                bar_plot2 = dcc.Graph(figure=px.bar(y2, 
                     x=header,
-                    y=y2,
-                    title=str([h1+','+k1+','+l1+' and q = '+q2])))
+                    y=y1,
+                    title=str([h1+','+k1+','+l1+' and q = ' +q2]),
+                    labels={'x': '', 'y':''}))
 
                 return html.Div(className='chart-grid',children=[html.Div(bar_plot1),html.Div(bar_plot2),html.Div(bar_plot3)],style={'display':'flex'})
 
@@ -223,13 +226,14 @@ def update_output_container(file,indices):
                 bar_plot1 = dcc.Graph(figure=px.bar(y, 
                     x=header,
                     y=y,
-                    title=str([h1+','+k1+','+l1+' and q = '+q])))
+                    title=str([h1+','+k1+','+l1+' and q = '+q]),
+                    labels={'x': '', 'y':''}))
 
                 bar_plot2 = dcc.Graph(figure=px.bar(y1, 
                     x=header,
                     y=y1,
-                    title=str([h1+','+k1+','+l1+' and q = '+q1])))
-
+                    title=str([h1+','+k1+','+l1+' and q = '+q1]),
+                    labels={'x': '', 'y':''}))
 
                 return html.Div(className='chart-grid',children=[html.Div(bar_plot1),html.Div(bar_plot2)],style={'display':'flex'})
 
@@ -246,8 +250,8 @@ def update_output_container(file,indices):
                 bar_plot1 = dcc.Graph(figure=px.bar(y, 
                     x=header,
                     y=y,
-                    title=str([h1+','+k1+','+l1+' and q = '+q])))
-
+                    title=str([h1+','+k1+','+l1+' and q = '+q]),
+                    labels={'x': '', 'y':''}))
 
                 return html.Div(className='chart-grid',children=html.Div(bar_plot1),style={'display':'flex'})
 
