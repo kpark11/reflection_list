@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[79]:
+# In[80]:
 
 
 ### This program is to visualize the Reflection list after it is saved with Dashbaord. ###
@@ -52,7 +52,7 @@ app.layout = html.Div([
                         ["Drag and drop or click to select a file to upload."]
                     ),
                     style={
-                        "width": "100%",
+                        "width": "90%",
                         "height": "60px",
                         "lineHeight": "60px",
                         "borderWidth": "1px",
