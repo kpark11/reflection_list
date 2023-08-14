@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[17]:
+# In[19]:
 
 
 ### This program is to visualize the Reflection list after it is saved with Dashbaord. ###
@@ -22,11 +22,15 @@ import fnmatch
 import matplotlib.pyplot as plt
 
 
+UPLOAD_DIRECTORY = "/files/uploaded_files"
+
+if not os.path.exists(UPLOAD_DIRECTORY):
+    os.makedirs(UPLOAD_DIRECTORY)
+
+
 app = dash.Dash(__name__)
 
-server = app.server
-
-cwd = os.getcwd()
+#server = app.server
 
 app.title = "Reflection List"
 app.style = {'textAlign':'center','color':'#503D36','font-size':24}
@@ -38,8 +42,21 @@ app.layout = html.Div([
     
                        
     html.Div([html.Label("Upload here"),
-              dcc.Upload('Upload File',
-                         id='upload',
+              dcc.Upload(
+                    id="upload-data",
+                    children=html.Div(
+                        ["Drag and drop or click to select a file to upload."]
+                    ),
+                    style={
+                        "width": "100%",
+                        "height": "60px",
+                        "lineHeight": "60px",
+                        "borderWidth": "1px",
+                        "borderStyle": "dashed",
+                        "borderRadius": "5px",
+                        "textAlign": "center",
+                        "margin": "10px",
+                    },
                          )]),
     
     html.Div([html.Label("h: "),
@@ -65,9 +82,33 @@ app.layout = html.Div([
         html.Div(id='output-container', className='chart-grid', style={'display':'flex'})])
 ])
 
+
+def save_file(name, content):
+    """Decode and store a file uploaded with Plotly Dash."""
+    data = content.encode("utf8").split(b";base64,")[1]
+    with open(os.path.join(UPLOAD_DIRECTORY, name), "wb") as fp:
+        fp.write(base64.decodebytes(data))
+
+
+def uploaded_files():
+    """List the files in the upload directory."""
+    files = []
+    for filename in os.listdir(UPLOAD_DIRECTORY):
+        path = os.path.join(UPLOAD_DIRECTORY, filename)
+        if os.path.isfile(path):
+            files.append(filename)
+    return files
+
+
+def file_download_link(filename):
+    """Create a Plotly Dash 'A' element that downloads a file from the app."""
+    location = "/download/{}".format(urlquote(filename))
+    return html.A(filename, href=location)
+
+
 @app.callback(
     [Output(component_id='output-text',component_property='value'),
-     Output(component_id='output-file',component_property='value')],
+     Output(component_id='output-file',component_property='children')],
     [Input('upload', 'contents'),
     Input('upload', 'filename')
     ])
@@ -75,6 +116,7 @@ app.layout = html.Div([
 def update_upload_container(file_content,file_name):
     decoded_file_content = base64.b64decode(file_content)
     if fnmatch.fnmatch(file_name,'*.hkl*'):
+        save_file(file_name,decoded_file_content)
 
         h = indices[0]
         k = indices[1]
