@@ -85,7 +85,7 @@ app.layout = html.Div([
         html.Div(id='output-container', className='chart-grid', style={'display':'flex'})]),
     
     html.Div([html.Label("Description:")],
-        [html.Label("Once you upload the .hkl file, please wait. It is little slow :).")],
+        [html.Label("Once you upload the .hkl file from Mag2Pol software, please wait. It is little slow :).")],
             [html.Label("You can visualize the polarization matrix by typing in the indices you want.")])
 ])
 
