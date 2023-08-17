@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[99]:
+# In[2]:
 
 
 ### This program is to visualize the Reflection list after it is saved with Dashbaord. ###
@@ -145,7 +145,7 @@ def update_hkl_container(h,k,l):
         return [0,0,0]
     else:
         indices = [int(h),int(k),int(l)]
-        return indices
+        return "h,k,l: {}".format(indices)
 
 @app.callback(
     Output(component_id='output-container', component_property='children'),
