@@ -209,7 +209,7 @@ def update_output_container(file,indices):
                     title=str(h1+','+k1+','+l1+' and q = ' +q2),
                     labels={'x': '', 'y':''}))
 
-                return html.Div(className='chart-grid',children=[html.Div(*bar_plot1),html.Div(bar_plot2),html.Div(*bar_plot3)],style={'display':'flex'})
+                return html.Div(className='chart-grid',children=[html.Div(bar_plot1),html.Div(bar_plot2),html.Div(bar_plot3)],style={'display':'flex'})
 
 
             elif len(hkl)==2:
@@ -241,7 +241,7 @@ def update_output_container(file,indices):
                     title=str([h1+','+k1+','+l1+' and q = '+q1]),
                     labels={'x': '', 'y':''}))
 
-                return html.Div(className='chart-grid',children=[html.Div(*bar_plot1),html.Div(bar_plot2)],style={'display':'flex'})
+                return html.Div(className='chart-grid',children=[html.Div(bar_plot1),html.Div(bar_plot2)],style={'display':'flex'})
 
             elif len(hkl)==1:
 
