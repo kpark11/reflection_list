@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
+# In[16]:
 
 
 ### This program is to visualize the Reflection list after it is saved with Dashbaord. ###
@@ -43,7 +43,9 @@ app.style = {'textAlign':'center','color':'#503D36','font-size':24}
 app.layout = html.Div([
     html.H1("Reflection List"),
     
-    
+    html.H2("Description:"),
+    html.P("Once you upload the .hkl file from Mag2Pol software, please wait. It is little slow :)."),
+    html.P("You can visualize the polarization matrix by typing in the indices you want."),
                        
     html.Div([html.Label("Upload here"),
               dcc.Upload(
@@ -79,14 +81,14 @@ app.layout = html.Div([
             value=0,
             placeholder=0)]),
               
+    
+    
     html.Div([
         html.Div(id='output-file',className='file',style={'display':'flex'}),
         html.Div(id='output-hkl',className='HKL',style={'display':'flex'}),
         html.Div(id='output-container', className='chart-grid', style={'display':'flex'})]),
     
-    html.Div([html.Label("Description:")]),
-        html.Div([html.Label("Once you upload the .hkl file from Mag2Pol software, please wait. It is little slow :).")]),
-            html.Div([html.Label("You can visualize the polarization matrix by typing in the indices you want.")])
+    
 ])
 
 
@@ -207,7 +209,7 @@ def update_output_container(file,indices):
                     title=str(h1+','+k1+','+l1+' and q = ' +q2),
                     labels={'x': '', 'y':''}))
 
-                return html.Div(className='chart-grid',children=[html.Div(bar_plot1),html.Div(bar_plot2),html.Div(bar_plot3)],style={'display':'flex'})
+                return html.Div(className='chart-grid',children=[html.Div(*bar_plot1),html.Div(bar_plot2),html.Div(*bar_plot3)],style={'display':'flex'})
 
 
             elif len(hkl)==2:
@@ -238,7 +240,7 @@ def update_output_container(file,indices):
                     title=str([h1+','+k1+','+l1+' and q = '+q1]),
                     labels={'x': '', 'y':''}))
 
-                return html.Div(className='chart-grid',children=[html.Div(bar_plot1),html.Div(bar_plot2)],style={'display':'flex'})
+                return html.Div(className='chart-grid',children=[html.Div(*bar_plot1),html.Div(bar_plot2)],style={'display':'flex'})
 
             elif len(hkl)==1:
 
