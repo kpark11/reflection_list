@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[42]:
+# In[43]:
 
 
 ### This program is to visualize the Reflection list after it is saved with Dashbaord. ###
@@ -174,8 +174,6 @@ def update_output_container(file,indices):
                 hkl1 = hkl[1]
                 hkl2 = hkl[2]
                 
-                print(hkl)
-
                 mas = data[header].loc[hkl0].reset_index()
                 q = data['q'].loc[hkl0]
                 q = str(q)
@@ -190,10 +188,8 @@ def update_output_container(file,indices):
                 y = list(y[:,1])
                 y1 = mas1.values
                 y1 = list(y1[:,1])
-                print(y1)
                 y2 = mas2.values
                 y2 = list(y2[:,1])
-                print(y2)
                 bar_plot1 = dcc.Graph(figure=px.bar(y, 
                     x=header,
                     y=y,
