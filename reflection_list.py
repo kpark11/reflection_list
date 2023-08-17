@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[16]:
+# In[39]:
 
 
 ### This program is to visualize the Reflection list after it is saved with Dashbaord. ###
@@ -147,7 +147,7 @@ def update_hkl_container(h,k,l):
         return [0,0,0]
     else:
         indices = [int(h),int(k),int(l)]
-        return "h,k,l: {}".format(indices)
+        return indices
 
 @app.callback(
     Output(component_id='output-container', component_property='children'),
@@ -166,7 +166,7 @@ def update_output_container(file,indices):
             h1 = str(h)
             k1 = str(k)
             l1 = str(l)
-
+            
             hkl = data.loc[(data['h']==h) & (data['k']==k) & (data['l']==l)].index
             
             if len(hkl)==3:
@@ -217,6 +217,7 @@ def update_output_container(file,indices):
                 hkl1 = int(hkl[1])
 
                 mas = data[header].loc[hkl0].reset_index()
+
                 q = data['q'].loc[hkl0]
                 q = str(q)
                 mas1 = data[header].loc[hkl1].reset_index()
@@ -244,7 +245,8 @@ def update_output_container(file,indices):
 
             elif len(hkl)==1:
 
-                mas = data[header].loc[hkl].reset_index()       
+                mas = data[header].loc[hkl].reset_index()     
+
                 q = data['q'].loc[hkl]
                 q = q.values
                 q = str(q)
