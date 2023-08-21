@@ -44,7 +44,7 @@ app.layout = html.Div([
     html.H1("Reflection List"),
     
     html.H2("Description:"),
-    html.P("Once you upload the .hkl file from Mag2Pol software, please wait. It is little slow :)."),
+    html.P("Once you upload the .hkl file from Mag2Pol software, please wait. It is little slow."),
     html.P("You can visualize the polarization matrix by typing in the indices you want."),
                        
     html.Div([html.Label("Upload here"),
