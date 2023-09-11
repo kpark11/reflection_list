@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[33]:
+# In[34]:
 
 
 ### This program is to visualize the Reflection list after it is saved with Dashbaord. ###
@@ -49,7 +49,7 @@ app.layout = html.Div([
     html.P("You can visualize the polarization matrix by typing in the indices you want.",
           style={'textAlign':'center'}),
                        
-    html.Div([html.Label("Upload here",style={'textAlign':'center'}),
+    html.Div([html.Label("Upload here"),
               dcc.Upload(
                     id="upload",
                     children=html.Div(
@@ -65,7 +65,8 @@ app.layout = html.Div([
                         "textAlign": "center",
                         "margin": "10px",
                     },
-                         )]),
+                         )],
+            style={'textAlign':'center'}),
     
     html.Div([html.Label("h: "),
              dcc.Input(
