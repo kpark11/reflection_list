@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[44]:
+# In[32]:
 
 
 ### This program is to visualize the Reflection list after it is saved with Dashbaord. ###
@@ -22,6 +22,7 @@ import sys
 import fnmatch
 import matplotlib.pyplot as plt
 import base64
+import dash_bootstrap_components as dbc
 
 cwd = os.getcwd()
 print(cwd)
@@ -32,7 +33,7 @@ except:
     print('already exists')
 
 
-app = dash.Dash(__name__)
+app = dash.Dash(external_stylesheets=[dbc.themes.LUX])
 
 server = app.server
 
@@ -41,11 +42,12 @@ app.style = {'textAlign':'center','color':'#503D36','font-size':24}
 #---------------------------------------------------------------------------------
 
 app.layout = html.Div([
-    html.H1("Reflection List"),
-    
-    html.H2("Description:"),
-    html.P("Once you upload the .hkl file from Mag2Pol software, please wait. It is little slow."),
-    html.P("You can visualize the polarization matrix by typing in the indices you want."),
+    html.H1("Reflection List", style={'textAlign': 'center', 'color': '#3E57B0','font-size':50}),
+    html.H2("Description:", style={'textAlign': 'center', 'color': '#FF8903'}),
+    html.P("Once you upload the .hkl file from Mag2Pol software, please wait. It is little slow.", 
+           style={'textAlign':'center'}),
+    html.P("You can visualize the polarization matrix by typing in the indices you want.",
+          style={'textAlign':'center'}),
                        
     html.Div([html.Label("Upload here"),
               dcc.Upload(
