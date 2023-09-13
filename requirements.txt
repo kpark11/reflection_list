@@ -5,4 +5,8 @@ numpy==1.21.6
 plotly==5.9.0
 matplotlib==3.5.3
 gunicorn==19.7.1 
+<<<<<<< HEAD
 dash_bootstrap_components==1.5.0
+=======
+
+>>>>>>> 75e3b4bf89d786e1d0d790e69f9d3e409009dc69
