@@ -90,31 +90,31 @@ app.layout = html.Div([
     
     
     html.Div([
-        #html.Div(id='output-file',className='file',style={'display':'flex'}),
-        #html.Div(id='output-hkl',className='HKL',style={'display':'flex'}),
-        #html.Div(id='output-container', className='chart-grid', style={'display':'flex'}),
+        html.Div(id='output-file',className='file',style={'display':'flex'}),
+        html.Div(id='output-hkl',className='HKL',style={'display':'flex'}),
+        html.Div(id='output-container', className='chart-grid', style={'display':'flex'}),
         dcc.Loading(id="ls-loading",
-                    children=[
-                        html.Div([
-                            html.Div(id='output-file',className='file',style={'display':'flex'})
-                        ])
-                    ],
+                    #children=[
+                    #    html.Div([
+                    #        html.Div(id='output-file',className='file',style={'display':'flex'})
+                    #    ])
+                    #],
                     type="circle"),
         
         dcc.Loading(id="ls-loading-1",
-                    children=[
-                        html.Div([
-                            html.Div(id='output-hkl',className='HKL',style={'display':'flex'})
-                        ])
-                    ],
+                    #children=[
+                    #    html.Div([
+                    #        html.Div(id='output-hkl',className='HKL',style={'display':'flex'})
+                    #    ])
+                    #],
                     type="circle"),
         
         dcc.Loading(id="ls-loading-2",
-                    children=[
-                        html.Div([
-                            html.Div(id='output-container', className='chart-grid', style={'display':'flex'})
-                        ])
-                    ],
+                    #children=[
+                    #    html.Div([
+                    #        html.Div(id='output-container', className='chart-grid', style={'display':'flex'})
+                    #    ])
+                    #],
                     type="circle")
     ]),
     
@@ -135,7 +135,8 @@ def save_file(contents,name):
 
         
 @app.callback(
-    Output(component_id='ls-loading',component_property='children'),
+    [Output(component_id='ls-loading',component_property='children'),
+     Output(component_id='output-file',component_property='children')],
     [Input('upload','contents'),
      State('upload','filename')]
     )
@@ -166,7 +167,8 @@ def update_upload_container(contents,name):
 
 
 @app.callback(
-    Output(component_id='ls-loading-1',component_property='children'),
+    [Output(component_id='ls-loading',component_property='children'),
+     Output(component_id='output-hkl',component_property='children')],
     [Input(component_id='h',component_property='value'),
      Input(component_id='k',component_property='value'),
      Input(component_id='l',component_property='value')]
@@ -180,7 +182,8 @@ def update_hkl_container(h,k,l):
         return indices
 
 @app.callback(
-    Output(component_id='ls-loading-2',component_property='children'),
+    [Output(component_id='ls-loading-2',component_property='children'),
+     Output(component_id='output-container',component_property='children')],
     [Input(component_id='output-file',component_property='children'),
      Input(component_id='output-hkl',component_property='children')]
      )
