@@ -175,8 +175,8 @@ def update_hkl_container(h,k,l):
 
 @app.callback(
     Output(component_id='ls-loading-2',component_property='children'),
-    [Input(component_id='output-file',component_property='children'),
-     Input(component_id='output-hkl',component_property='children')]
+    [Input(component_id='ls-loading',component_property='children'),
+     Input(component_id='ls-loading-1',component_property='children')]
      )
 
 def update_output_container(file,indices):
