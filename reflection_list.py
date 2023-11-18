@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
-
 
 ### This program is to visualize the Reflection list after it is saved with Dashbaord. ###
 
@@ -298,9 +296,6 @@ def update_output_container(file,indices):
 if __name__ == '__main__':
     app.run_server(debug=True)
 
-
-
-# In[ ]:
 
 
 
