@@ -68,19 +68,19 @@ app.layout = html.Div([
                          )],
             style={'textAlign':'center','color':'#00AF4A'}),
     
-    html.Div([html.Label("h:   "),
+    html.Div([html.Label("h:\s"),
              dcc.Input(
              id='h',
             value=0,
             placeholder=0)],
             style={'textAlign':'center'}),
-    html.Div([html.Label("k:   "),
+    html.Div([html.Label("k:\s"),
              dcc.Input(
              id='k',
             value=0,
             placeholder=0)],
             style={'textAlign':'center'}),
-    html.Div([html.Label("l:    "),
+    html.Div([html.Label("l:\s"),
              dcc.Input(
              id='l',
             value=0,
