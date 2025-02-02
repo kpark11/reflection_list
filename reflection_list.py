@@ -71,19 +71,19 @@ app.layout = html.Div([
              id='h',
             value=0,
             placeholder=0)],
-            style={'textAlign':'center',"margin-left": "15px"}),
+            style={'textAlign':'center',"margin-left": "15px", 'padding-right':'15px'}),
     html.Div([html.Label("k: "),
              dcc.Input(
              id='k',
             value=0,
             placeholder=0)],
-            style={'textAlign':'center',"margin-left": "15px"}),
+            style={'textAlign':'center',"margin-left": "15px", 'padding-right':'15px'}),
     html.Div([html.Label("l: "),
              dcc.Input(
              id='l',
             value=0,
             placeholder=0)],
-            style={'textAlign':'center',"margin-left": "15px"}),
+            style={'textAlign':'center',"margin-left": "15px", 'padding-right':'15px'}),
               
     
     
