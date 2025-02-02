@@ -42,7 +42,7 @@ app.style = {'textAlign':'center','color':'#503D36','font-size':24}
 app.layout = html.Div([
     html.H1("Reflection List", style={'textAlign': 'center', 'color': '#3E57B0','font-size':50}),
     html.H2("Description:", style={'textAlign': 'center', 'color': '#FF8903'}),
-    html.P("Once you upload the .hkl file from Mag2Pol software, please wait. It is little slow.", 
+    html.P("Once you upload the .hkl file from Mag2Pol software, please wait. It is cleaning the text file.", 
            style={'textAlign':'center'}),
     html.P("You can visualize the polarization matrix by typing in the indices you want.",
           style={'textAlign':'center'}),
@@ -67,19 +67,19 @@ app.layout = html.Div([
             style={'textAlign':'center','color':'#00AF4A'}),
     
     html.Div([html.Label("h: "),
-             dcc.Input(
+             dbc.Input(
              id='h',
             value=0,
             placeholder=0)],
             style={'textAlign':'center',"margin-left": "15px", 'padding-right':'15px'}),
     html.Div([html.Label("k: "),
-             dcc.Input(
+             dbc.Input(
              id='k',
             value=0,
             placeholder=0)],
             style={'textAlign':'center',"margin-left": "15px", 'padding-right':'15px'}),
     html.Div([html.Label("l: "),
-             dcc.Input(
+             dbc.Input(
              id='l',
             value=0,
             placeholder=0)],
@@ -152,7 +152,7 @@ def update_upload_container(contents,name):
                 new_writing.write(line)
             new_writing.close()
 
-            return new_file_path
+            return 'Uploaded file (cleaned version): ' + new_file
     except:
         return None
 
@@ -166,10 +166,10 @@ def update_upload_container(contents,name):
 
 def update_hkl_container(h,k,l):
     if h == '' or k == '' or l == '' or h == '-' or k == '-' or l == '-':
-        return [0,0,0]
+        return 'Chosen indices (hkl): ' + str([0,0,0])
     else:
         indices = [int(h),int(k),int(l)]
-        return indices
+        return 'Chosen indices (hkl): ' + str(indices)
 
 @app.callback(
     Output(component_id='ls-loading-2',component_property='children'),
