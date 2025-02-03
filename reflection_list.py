@@ -16,7 +16,7 @@ import os
 import re
 import base64
 import dash_bootstrap_components as dbc
-from flask import Flask
+#from flask import Flask
 
 
 cwd = os.getcwd()
@@ -28,9 +28,9 @@ except:
     
 data_path = os.path.join(cwd,'data')
 
-testing_server = Flask(__name__)
+#testing_server = Flask(__name__)
 
-app = dash.Dash(server = testing_server, 
+app = dash.Dash(#server = testing_server, 
                 external_stylesheets=[dbc.themes.LUX])
 
 server = app.server
@@ -40,6 +40,10 @@ app.style = {'textAlign':'center','color':'#503D36','font-size':24}
 #---------------------------------------------------------------------------------
 
 app.layout = html.Div([
+    
+    dbc.Button('test paths', id='test_button'),
+    html.Div('test', id='test'),
+    
     html.H1("Reflection List", style={'textAlign': 'center', 'color': '#3E57B0','font-size':50}),
     
     html.Br(),
@@ -178,6 +182,17 @@ def save_file(contents,name):
         return str(new_path)
     except:
         return str(new_path)
+    
+@app.callback(
+    Output(component_id='test',component_property='children'),
+    Input('test_button','n_clicks')
+)
+
+def testing(n_clicks):
+    try:
+        return os.listdir(data_path)
+    except:
+        return os.listdir(cwd)
         
 @app.callback(
     Output(component_id='ls-loading',component_property='children'),
