@@ -223,11 +223,12 @@ def update_hkl_container(h,k,l):
 def update_output_container(file,indices):
     file = file.split(' ')[-1]
     file = os.path.join(file_path, file)
+    indices = indices.split('[')[-1].split(']')[0].split(', ')
     try:
         if '_cleaned.txt' in file:
             data = pd.read_fwf(file)
             header = ['Pxx','Pxy','Pxz','Pyx','Pyy','Pyz','Pzx','Pzy','Pzz']
-            indices = indices.split('[')[-1].split(']')[0].split(', ')
+            
             h = int(indices[0])
             k = int(indices[1])
             l = int(indices[2])
