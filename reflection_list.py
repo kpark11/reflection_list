@@ -68,7 +68,9 @@ app.layout = html.Div([
                    external_link=True,
                    color="primary",),
         ], 
-        style={'display':'inline-block', 'padding':'15px', 'text-align':'center'},
+        style={'display':'inline-block', 'padding':'15px', 'text-align':'center',
+               'justify-content':'center',
+               'align-items':'center'},
         ),
     
     html.P("You can visualize the polarization matrix by typing in the indices you want.",
