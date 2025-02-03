@@ -193,7 +193,7 @@ def update_upload_container(contents,name):
                 new_writing.write(line)
             new_writing.close()
 
-            return new_path
+            return new_file_path
     except:
         return None
 
