@@ -11,14 +11,9 @@ from dash import State
 from dash import html
 from dash.dependencies import Input, Output
 import pandas as pd
-import numpy as np
-import plotly.graph_objs as go
 import plotly.express as px
 import os
 import re
-import sys
-import fnmatch
-import matplotlib.pyplot as plt
 import base64
 import dash_bootstrap_components as dbc
 
@@ -336,7 +331,7 @@ def update_output_container(file,indices):
 
     
     except:
-        None
+        return html.Div(file + indices)
     
     
     
