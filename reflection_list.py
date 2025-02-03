@@ -20,17 +20,17 @@ from flask import Flask
 
 
 cwd = os.getcwd()
-print(cwd)
 file_path = os.path.join(cwd,'download')
 try:
     os.mkdir(file_path)
 except:
     print('already exists')
+    
+data_path = os.path.join(cwd,'data')
 
+testing_server = Flask(__name__)
 
-#testing_server = Flask(__name__)
-
-app = dash.Dash(#server = testing_server, 
+app = dash.Dash(server = testing_server, 
                 external_stylesheets=[dbc.themes.LUX])
 
 server = app.server
@@ -233,13 +233,8 @@ def update_hkl_container(h,k,l):
 def update_output_container(file,indices):
     try:
         if '_cleaned.txt' in file:
-            print(file)
             data = pd.read_fwf(file)
-            print(data)
             header = ['Pxx','Pxy','Pxz','Pyx','Pyy','Pyz','Pzx','Pzy','Pzz']
-
-            print('test 1')
-            
 
             h = int(indices[0])
             k = int(indices[1])
@@ -248,12 +243,7 @@ def update_output_container(file,indices):
             k1 = str(indices[1])
             l1 = str(indices[2])
             
-            print(type(h),type(k),type(l),type(h1),type(k1),type(l1))
-            
-            print(data.loc[(data['h']==h) & (data['k']==k) & (data['l']==l)])
-            
             hkl = data.loc[(data['h']==h) & (data['k']==k) & (data['l']==l)].index
-            print(hkl)
             
             if len(hkl)==3:
                 
