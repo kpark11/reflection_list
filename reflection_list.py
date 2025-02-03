@@ -182,9 +182,8 @@ def save_file(contents,name):
 )
 
 def download_MnO(n_clicks):
-    path = os.path.join(data_path,'MnO.hkl')
-    data = open(path,'r')
-    return dict(content=data, filename="MnO.hkl")
+    data = open(data_path,'r')
+    return dict(content=data_path, filename="MnO.hkl")
 
 @app.callback(
     Output("download-LMO", "data"),
