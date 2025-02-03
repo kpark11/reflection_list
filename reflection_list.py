@@ -192,12 +192,13 @@ def update_output_container(file,indices):
         if '_cleaned.txt' in file:
             data = pd.read_fwf(file)
             header = ['Pxx','Pxy','Pxz','Pyx','Pyy','Pyz','Pzx','Pzy','Pzz']
-            h = indices[0]
-            k = indices[1]
-            l = indices[2]
-            h1 = str(h)
-            k1 = str(k)
-            l1 = str(l)
+            indices = indices.split('[')[-1].split(']')[0].split(', ')
+            h = int(indices[0])
+            k = int(indices[1])
+            l = int(indices[2])
+            h1 = indices[0]
+            k1 = indices[1]
+            l1 = indices[2]
             
             hkl = data.loc[(data['h']==h) & (data['k']==k) & (data['l']==l)].index
             
