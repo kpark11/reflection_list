@@ -144,7 +144,7 @@ app.layout = html.Div([
                     ],
                     type="circle"),
         
-        html.Div('Chosen Indices:', style={'font-weight':'bold'}),
+        html.Div('Chosen Indices (hkl):', style={'font-weight':'bold'}),
         
         dcc.Loading(id="ls-loading-1",
                     children=[
