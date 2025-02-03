@@ -16,6 +16,8 @@ import os
 import re
 import base64
 import dash_bootstrap_components as dbc
+from flask import Flask
+
 
 cwd = os.getcwd()
 print(cwd)
@@ -24,11 +26,12 @@ try:
     os.mkdir(file_path)
 except:
     print('already exists')
-    
-download_hkl = os.path.join(cwd,'data')
 
 
-app = dash.Dash(external_stylesheets=[dbc.themes.LUX])
+#testing_server = Flask(__name__)
+
+app = dash.Dash(#server = testing_server, 
+                external_stylesheets=[dbc.themes.LUX])
 
 server = app.server
 
@@ -56,21 +59,23 @@ app.layout = html.Div([
                    download="MnO.hkl",
                    external_link=True,
                    color="primary",
-                   style={'justify-center':'center'}),
+                   style={'display':'inline-block',
+                          'margin-right':'10px'}),
     
         dbc.Button('LaMnO3.hkl file',
                    href="/data",
                    download="LaMnO3.hkl",
                    external_link=True,
                    color="primary",
-                   style={'justify-center':'center'}),
+                   style={'display':'inline-block',
+                          'margin-left':'10px'}),
         ], 
-        style={'display':'inline-block', 
-               'padding':'15px', 
-               'text-align':'center',
+        style={'text-align':'center',
                'justify-content':'center',
                'align-items':'center'},
         ),
+    
+    html.Br(),
     
     html.P("You can visualize the polarization matrix by typing in the indices you want.",
           style={'textAlign':'center'}),
@@ -94,40 +99,40 @@ app.layout = html.Div([
                          )],
             style={'textAlign':'center','color':'#00AF4A'}),
     
-    html.Div([html.Div([html.Label("h: "),
+    html.Div([html.Div([html.Label("h: ",  style={'text-align':'center'}),
                          dbc.Input(
                          id='h',
                         value=0,
-                        placeholder=0)],
-                        style={'textAlign':'center',
+                        placeholder=0,  style={'text-align':'center'})],
+                        style={'text-align':'center',
                                'width':'25%',
-                               "margin-left": "15px", 
+                               "margin": "0 auto", 
                                'padding-right':'15px',
                                'display':'inline-block'}),
-                html.Div([html.Label("k: "),
+                html.Div([html.Label("k: ",  style={'text-align':'center'}),
                          dbc.Input(
                          id='k',
                         value=0,
-                        placeholder=0)],
-                        style={'textAlign':'center',
+                        placeholder=0,  style={'text-align':'center'})],
+                        style={'text-align':'center',
                                'width':'25%',
-                               "margin-left": "15px", 
+                               "margin": "0 auto", 
                                'padding-right':'15px',
                                'display':'inline-block'}),
-                html.Div([html.Label("l: "),
+                html.Div([html.Label("l: ",  style={'text-align':'center'}),
                          dbc.Input(
                          id='l',
                         value=0,
-                        placeholder=0)],
-                        style={'textAlign':'center',
+                        placeholder=0,  style={'text-align':'center',})],
+                        style={'text-align':'center',
                                'width':'25%',
-                               "margin-left": "15px", 
+                               "margin": "0 auto", 
                                'padding-right':'15px',
                                'display':'inline-block'})],
-             style={'display':'inline-block',
-                    'text-align':'center',
+             style={'text-align':'center',
                     'justify-content':'center',
-                    'align-items':'center'}),
+                    'align-items':'center',
+                    'width':'100%'}),
               
     
     
@@ -135,17 +140,23 @@ app.layout = html.Div([
         #html.Div(id='output-file',className='file',style={'display':'flex'}),
         #html.Div(id='output-hkl',className='HKL',style={'display':'flex'}),
         #html.Div(id='output-container', className='chart-grid', style={'display':'flex'}),
+        html.Div('Input File:', style={'font-weight':'bold'}),
+        
         dcc.Loading(id="ls-loading",
                     children=[
                         html.Div(id='output-file',className='file',style={'display':'flex'})
                     ],
                     type="circle"),
         
+        html.Div('Chosen Indices:', style={'font-weight':'bold'}),
+        
         dcc.Loading(id="ls-loading-1",
                     children=[
                         html.Div(id='output-hkl',className='HKL',style={'display':'flex'})
                     ],
                     type="circle"),
+        
+        html.H5("Graphs", style={'textAlign': 'center', 'color': '#3E57B0'}),
         
         dcc.Loading(id="ls-loading-2",
                     children=[
@@ -174,8 +185,7 @@ def save_file(contents,name):
      State('upload','filename')]
 )
 
-def update_upload_container(contents,name):    
-    name = os.path.join(file_path, name)
+def update_upload_container(contents,name):
     try:
         if '.hkl' in name:
             new_path = save_file(contents,name)
@@ -223,165 +233,131 @@ def update_hkl_container(h,k,l):
 def update_output_container(file,indices):
     try:
         if '_cleaned.txt' in file:
+            print(file)
+            data = pd.read_fwf(file)
+            print(data)
+            header = ['Pxx','Pxy','Pxz','Pyx','Pyy','Pyz','Pzx','Pzy','Pzz']
+
+            print('test 1')
             
-            try:
-                data = pd.read_fwf(file)
-                header = ['Pxx','Pxy','Pxz','Pyx','Pyy','Pyz','Pzx','Pzy','Pzz']
-            except:
-                return 'test 1'
+
+            h = int(indices[0])
+            k = int(indices[1])
+            l = int(indices[2])
+            h1 = str(indices[0])
+            k1 = str(indices[1])
+            l1 = str(indices[2])
             
-            try:
-                h = str(indices[0])
-                k = str(indices[1])
-                l = str(indices[2])
-                h1 = indices[0]
-                k1 = indices[1]
-                l1 = indices[2]
-                
-                hkl = data.loc[(data['h']==h) & (data['k']==k) & (data['l']==l)].index
-            except:
-                return 'test 2'
+            print(type(h),type(k),type(l),type(h1),type(k1),type(l1))
+            
+            print(data.loc[(data['h']==h) & (data['k']==k) & (data['l']==l)])
+            
+            hkl = data.loc[(data['h']==h) & (data['k']==k) & (data['l']==l)].index
+            print(hkl)
             
             if len(hkl)==3:
                 
-                try:
-                    hkl0 = hkl[0]
-                    hkl1 = hkl[1]
-                    hkl2 = hkl[2]
-                except:
-                    return 'test 3'
+
+                hkl0 = hkl[0]
+                hkl1 = hkl[1]
+                hkl2 = hkl[2]            
+
+                mas = data[header].loc[hkl0].reset_index()
+                q = data['q'].loc[hkl0]
+                q = str(q)
+                mas1 = data[header].loc[hkl1].reset_index()
+                q1 = data['q'].loc[hkl1]
+                q1 = str(q1)
+                mas2 = data[header].loc[hkl2].reset_index()
+                q2 = data['q'].loc[hkl2]
+                q2 = str(q2)
+
+                y = mas.values
+                y = list(y[:,1])
+                y1 = mas1.values
+                y1 = list(y1[:,1])
+                y2 = mas2.values
+                y2 = list(y2[:,1])
+                bar_plot1 = dcc.Graph(figure=px.bar(y, 
+                    x=header,
+                    y=y,
+                    title=h1+','+k1+','+l1+' and q = ' +q,
+                    labels={'x': '', 'y':''}))
+
+                bar_plot2 = dcc.Graph(figure=px.bar(y1, 
+                    x=header,
+                    y=y1,
+                    title=h1+','+k1+','+l1+' and q = ' +q1,
+                    labels={'x': '', 'y':''}))
                 
-                try:
-                    mas = data[header].loc[hkl0].reset_index()
-                    q = data['q'].loc[hkl0]
-                    q = str(q)
-                    mas1 = data[header].loc[hkl1].reset_index()
-                    q1 = data['q'].loc[hkl1]
-                    q1 = str(q1)
-                    mas2 = data[header].loc[hkl2].reset_index()
-                    q2 = data['q'].loc[hkl2]
-                    q2 = str(q2)
-
-                    y = mas.values
-                    y = list(y[:,1])
-                    y1 = mas1.values
-                    y1 = list(y1[:,1])
-                    y2 = mas2.values
-                    y2 = list(y2[:,1])
-                    bar_plot1 = dcc.Graph(figure=px.bar(y, 
-                        x=header,
-                        y=y,
-                        title=str(h1+','+k1+','+l1+' and q = ' +q),
-                        labels={'x': '', 'y':''}))
-
-                    bar_plot2 = dcc.Graph(figure=px.bar(y1, 
-                        x=header,
-                        y=y1,
-                        title=str(h1+','+k1+','+l1+' and q = ' +q1),
-                        labels={'x': '', 'y':''}))
-                    
-                    bar_plot3 = dcc.Graph(figure=px.bar(y2, 
-                        x=header,
-                        y=y2,
-                        title=str(h1+','+k1+','+l1+' and q = ' +q2),
-                        labels={'x': '', 'y':''}))
-                    
-                except:
-                    return 'test 4'
+                bar_plot3 = dcc.Graph(figure=px.bar(y2, 
+                    x=header,
+                    y=y2,
+                    title=h1+','+k1+','+l1+' and q = ' +q2,
+                    labels={'x': '', 'y':''}))
 
                 return html.Div(className='chart-grid',children=[html.Div(bar_plot1),html.Div(bar_plot2),html.Div(bar_plot3)],style={'display':'flex'})
 
             
             elif len(hkl)==2:
                 
-                try:
-                    hkl0 = int(hkl[0])
-                    hkl1 = int(hkl[1])
-                except:
-                    return 'test 6'
-                
-                
-                
-                try:
-                    mas = data[header].loc[hkl0].reset_index()
-                except:
-                    return 'test 7'
+                hkl0 = int(hkl[0])
+                hkl1 = int(hkl[1])
+            
+                mas = data[header].loc[hkl0].reset_index()
 
-                
-                
-                try:
-                    q = data['q'].loc[hkl0]
-                    q = str(q)
-                    mas1 = data[header].loc[hkl1].reset_index()
-                    q1 = data['q'].loc[hkl1]
-                    q1 = str(q1)
+                q = data['q'].loc[hkl0]
+                q = str(q)
+                mas1 = data[header].loc[hkl1].reset_index()
+                q1 = data['q'].loc[hkl1]
+                q1 = str(q1)
 
-                    y = mas.values
-                    y = list(y[:,1])
-                    y1 = mas1.values
-                    y1 = list(y1[:,1])
-                except:
-                    return 'test 8'
+                y = mas.values
+                y = list(y[:,1])
+                y1 = mas1.values
+                y1 = list(y1[:,1])
 
-                
-                
-                try:
-                    bar_plot1 = dcc.Graph(figure=px.bar(y, 
-                        x=header,
-                        y=y,
-                        title=str(h1+','+k1+','+l1+' and q = '+q),
-                        labels={'x': '', 'y':''}))
+                bar_plot1 = dcc.Graph(figure=px.bar(y, 
+                    x=header,
+                    y=y,
+                    title=str(h1+','+k1+','+l1+' and q = '+q),
+                    labels={'x': '', 'y':''}))
 
-                    bar_plot2 = dcc.Graph(figure=px.bar(y1, 
-                        x=header,
-                        y=y1,
-                        title=str(h1+','+k1+','+l1+' and q = '+q1),
-                        labels={'x': '', 'y':''}))
-                except:
-                    return 'test 9'
+                bar_plot2 = dcc.Graph(figure=px.bar(y1, 
+                    x=header,
+                    y=y1,
+                    title=str(h1+','+k1+','+l1+' and q = '+q1),
+                    labels={'x': '', 'y':''}))
 
                 return html.Div(className='chart-grid',children=[html.Div(bar_plot1),html.Div(bar_plot2)],style={'display':'flex'})
 
             elif len(hkl)==1:
                 
-                try:
-                    mas = data[header].loc[hkl].reset_index()     
-                except:
-                    return 'test 11'
+                mas = data[header].loc[hkl].reset_index()     
 
-                
-                
-                try:
-                    q = data['q'].loc[hkl]
-                    q = q.values
-                    q = str(q)
+                q = data['q'].loc[hkl]
+                q = q.values
+                q = str(q)
 
-                    y = mas.to_numpy()
-                    y = list(y[0,1:])
-                except:
-                    return 'test 12'
-
+                y = mas.to_numpy()
+                y = list(y[0,1:])
                 
-                
-                try:
-                    bar_plot1 = dcc.Graph(figure=px.bar(y, 
-                        x=header,
-                        y=y,
-                        title=str(h1+','+k1+','+l1+' and q = '+q),
-                        labels={'x': '', 'y':''}))
-                except:
-                    return 'test 13'
+                bar_plot1 = dcc.Graph(figure=px.bar(y, 
+                    x=header,
+                    y=y,
+                    title=str(h1+','+k1+','+l1+' and q = '+q),
+                    labels={'x': '', 'y':''}))
 
                 return html.Div(className='chart-grid',children=html.Div(bar_plot1),style={'display':'flex'})
 
             else:
-                return data.loc[(data['h']==h) & (data['k']==k) & (data['l']==l)].index
+                None
         else:
-            return '2. idk what is going on'
+            None
 
     
     except:
-        return '3. idk what is going on'
+        return html.Div('Error')
     
     
     
