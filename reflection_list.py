@@ -126,7 +126,9 @@ app.layout = html.Div([
                                'padding-right':'15px',
                                'display':'inline-block'})],
              style={'display':'inline-block',
-                    'text-align':'center'}),
+                    'text-align':'center',
+                    'justify-content':'center',
+                    'align-items':'center'}),
               
     
     
