@@ -52,6 +52,7 @@ app.layout = html.Div([
            style={'textAlign':'center'}),
     
     dcc.Markdown("Here is the MnO and LaMnO<sub>3</sub> .hkl files if you would like to test it.",
+                 dangerously_allow_html=True,
                  style={'textAlign':'center'}),
     
     html.Div([
@@ -67,7 +68,7 @@ app.layout = html.Div([
                    external_link=True,
                    color="primary",),
         ], 
-        style={'display':'inline-block'},
+        style={'display':'inline-block', 'padding':'15px', 'text-align':'center'},
         ),
     
     html.P("You can visualize the polarization matrix by typing in the indices you want.",
