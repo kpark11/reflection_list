@@ -41,6 +41,7 @@ app.style = {'textAlign':'center','color':'#503D36','font-size':24}
 
 app.layout = html.Div([
     html.H1("Reflection List", style={'textAlign': 'center', 'color': '#3E57B0','font-size':50}),
+    html.Br(),
     html.H2("Description:", style={'textAlign': 'center', 'color': '#FF8903'}),
     html.P("Once you upload the .hkl file from Mag2Pol software, please wait. It is cleaning the text file.", 
            style={'textAlign':'center'}),
@@ -71,19 +72,28 @@ app.layout = html.Div([
              id='h',
             value=0,
             placeholder=0)],
-            style={'textAlign':'center',"margin-left": "15px", 'padding-right':'15px'}),
+            style={'textAlign':'center',
+                   'width':'25%',
+                   "margin-left": "15px", 
+                   'padding-right':'15px'}),
     html.Div([html.Label("k: "),
              dbc.Input(
              id='k',
             value=0,
             placeholder=0)],
-            style={'textAlign':'center',"margin-left": "15px", 'padding-right':'15px'}),
+            style={'textAlign':'center',
+                   'width':'25%',
+                   "margin-left": "15px", 
+                   'padding-right':'15px'}),
     html.Div([html.Label("l: "),
              dbc.Input(
              id='l',
             value=0,
             placeholder=0)],
-            style={'textAlign':'center',"margin-left": "15px", 'padding-right':'15px'}),
+            style={'textAlign':'center',
+                   'width':'25%',
+                   "margin-left": "15px", 
+                   'padding-right':'15px'}),
               
     
     
