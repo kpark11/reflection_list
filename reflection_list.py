@@ -192,7 +192,6 @@ def download_MnO(n_clicks):
     data = open(data_file, 'r', encoding='utf-8')
     lines = data.readlines()
     data.close()
-    print(' '.join(lines))
     return dict(content=''.join(lines), filename="MnO.hkl")
 
 @app.callback(
@@ -206,7 +205,6 @@ def download_LMO(n_clicks):
     data = open(data_file, 'r', encoding='utf-8')
     lines = data.readlines()
     data.close()
-    print(lines)
     return dict(content=''.join(lines), filename="LaMnO3.hkl")
         
 @app.callback(
