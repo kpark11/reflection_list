@@ -19,13 +19,13 @@ import dash_bootstrap_components as dbc
 
 cwd = os.getcwd()
 print(cwd)
-file_path = cwd+'\download'
+file_path = os.path.join(cwd,'download')
 try:
     os.mkdir(file_path)
 except:
     print('already exists')
     
-download_hkl = cwd+'\data'
+download_hkl = os.path.join(cwd,'data')
 
 
 app = dash.Dash(external_stylesheets=[dbc.themes.LUX])
