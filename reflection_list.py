@@ -58,14 +58,16 @@ app.layout = html.Div([
         html.Button("MnO file", id="button-MnO", 
                     style={'display':'inline-block',
                            'margin-left':'10px',
-                           'background:':'black',
+                           'background':'black',
+                           'color':'white',
                            'border-radius':'10px'},),
         dcc.Download(id="download-MnO"),
     
         html.Button("LaMnO3 file", id="button-LMO",
                     style={'display':'inline-block',
                            'margin-left':'10px',
-                           'background:':'black',
+                           'background':'black',
+                           'color':'white',
                            'border-radius':'10px'},),
         dcc.Download(id="download-LMO"),
         
