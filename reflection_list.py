@@ -218,8 +218,6 @@ def update_hkl_container(h,k,l):
      )
 
 def update_output_container(file,indices):
-    file = file.split(' ')[-1]
-    file = os.path.join(file_path, file)
     try:
         if '_cleaned.txt' in file:
             data = pd.read_fwf(file)
