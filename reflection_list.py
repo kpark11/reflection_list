@@ -197,7 +197,7 @@ def update_upload_container(contents,name):
 
             return new_file_path
     except:
-        return None
+        return 'You need to input .hkl file'
 
 
 @app.callback(
@@ -328,12 +328,13 @@ def update_output_container(file,indices):
                 return html.Div(className='chart-grid',children=html.Div(bar_plot1),style={'display':'flex'})
 
             else:
-                None
-
+                return '1. idk what is going on'
+        else:
+            return '2. idk what is going on'
 
     
     except:
-        None
+        return '3. idk what is going on'
     
     
     
