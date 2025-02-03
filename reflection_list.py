@@ -173,6 +173,7 @@ def save_file(contents,name):
     )
 
 def update_upload_container(contents,name):    
+    name = os.path.join(file_path, name)
     try:
         if '.hkl' in name:
             new_path = save_file(contents,name)
