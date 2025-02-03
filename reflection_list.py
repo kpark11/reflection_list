@@ -46,7 +46,7 @@ app.layout = html.Div([
     html.P("Once you upload the .hkl file from Mag2Pol software, please wait. It is cleaning the text file.", 
            style={'textAlign':'center'}),
     
-    dcc.Markdown("Here is the MnO and LaMnO<sub>3</sub> .hkl files if you would like to test it.",
+    dcc.Markdown("Here are MnO and LaMnO<sub>3</sub> .hkl files if you would like to test it.",
                  dangerously_allow_html=True,
                  style={'textAlign':'center'}),
     
