@@ -41,9 +41,6 @@ app.style = {'textAlign':'center','color':'#503D36','font-size':24}
 
 app.layout = html.Div([
     
-    dbc.Button('test paths', id='test_button'),
-    html.Div('test', id='test'),
-    
     html.H1("Reflection List", style={'textAlign': 'center', 'color': '#3E57B0','font-size':50}),
     
     html.Br(),
@@ -58,21 +55,16 @@ app.layout = html.Div([
                  style={'textAlign':'center'}),
     
     html.Div([
-        dbc.Button('MnO.hkl file',
-                   href="/data",
-                   download="MnO.hkl",
-                   external_link=True,
-                   color="primary",
-                   style={'display':'inline-block',
-                          'margin-right':'10px'}),
+        html.Button("MnO file", id="button-MnO", 
+                    style={'display':'inline-block',
+                           'margin-left':'10px'},),
+        dcc.Download(id="download-MnO"),
     
-        dbc.Button('LaMnO3.hkl file',
-                   href="/data",
-                   download="LaMnO3.hkl",
-                   external_link=True,
-                   color="primary",
-                   style={'display':'inline-block',
-                          'margin-left':'10px'}),
+        html.Button("LaMnO3 file", id="button-LMO",
+                    style={'display':'inline-block',
+                           'margin-left':'10px'},),
+        dcc.Download(id="download-LMO"),
+        
         ], 
         style={'text-align':'center',
                'justify-content':'center',
@@ -184,15 +176,26 @@ def save_file(contents,name):
         return str(new_path)
     
 @app.callback(
-    Output(component_id='test',component_property='children'),
-    Input('test_button','n_clicks')
+    Output("download-MnO", "data"),
+    Input("button-MnO", "n_clicks"),
+    prevent_initial_call=True,
 )
 
-def testing(n_clicks):
-    try:
-        return os.listdir(data_path)
-    except:
-        return os.listdir(cwd)
+def download_MnO(n_clicks):
+    path = os.path.join(data_path,'MnO.hkl')
+    data = open(path,'r')
+    return dict(content=data, filename="MnO.hkl")
+
+@app.callback(
+    Output("download-LMO", "data"),
+    Input("button-LMO", "n_clicks"),
+    prevent_initial_call=True,
+)
+
+def download_LMO(n_clicks):
+    path = os.path.join(data_path,'LaMnO3.hkl')
+    data = open(path,'r')
+    return dict(content=data, filename="LaMnO3.hkl")
         
 @app.callback(
     Output(component_id='ls-loading',component_property='children'),
