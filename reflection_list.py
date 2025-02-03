@@ -54,7 +54,7 @@ app.layout = html.Div([
     dcc.Markdown("Here is the MnO and LaMnO<sub>3</sub> .hkl files if you would like to test it.",
                  style={'textAlign':'center'}),
     
-    html.Div(
+    html.Div([
         dbc.Button('MnO.hkl file',
                    href="/data",
                    download="MnO.hkl",
@@ -66,7 +66,7 @@ app.layout = html.Div([
                    download="LaMnO3.hkl",
                    external_link=True,
                    color="primary",),
-        
+        ], 
         style={'display':'inline-block'},
         ),
     
