@@ -192,7 +192,7 @@ def update_upload_container(contents,name):
                 new_writing.write(line)
             new_writing.close()
 
-            return 'Uploaded file (cleaned version): ' + new_file
+            return new_path
     except:
         return None
 
@@ -206,10 +206,10 @@ def update_upload_container(contents,name):
 
 def update_hkl_container(h,k,l):
     if h == '' or k == '' or l == '' or h == '-' or k == '-' or l == '-':
-        return 'Chosen indices (hkl): ' + str([0,0,0])
+        return [0,0,0]
     else:
         indices = [int(h),int(k),int(l)]
-        return 'Chosen indices (hkl): ' + str(indices)
+        return indices
 
 @app.callback(
     Output(component_id='ls-loading-2',component_property='children'),
@@ -220,7 +220,6 @@ def update_hkl_container(h,k,l):
 def update_output_container(file,indices):
     file = file.split(' ')[-1]
     file = os.path.join(file_path, file)
-    indices = indices.split('[')[-1].split(']')[0].split(', ')
     try:
         if '_cleaned.txt' in file:
             data = pd.read_fwf(file)
@@ -333,7 +332,7 @@ def update_output_container(file,indices):
 
     
     except:
-        return html.Div(file + indices)
+        None
     
     
     
