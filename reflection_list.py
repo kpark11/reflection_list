@@ -122,7 +122,8 @@ app.layout = html.Div([
                                "margin-left": "15px", 
                                'padding-right':'15px',
                                'display':'inline-block'})],
-             style={'display':'inline-block'}),
+             style={'display':'inline-block',
+                    'text-align':'center'}),
               
     
     
