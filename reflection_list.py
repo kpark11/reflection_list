@@ -182,8 +182,12 @@ def save_file(contents,name):
 )
 
 def download_MnO(n_clicks):
-    data = open(data_path,'r')
-    return dict(content=data, filename="MnO.hkl")
+    data_file = os.path.join(data_path, 'MnO.hkl')
+    data = open(data_file, 'r', encoding='utf-8')
+    lines = data.readlines()
+    data.close()
+    print(' '.join(lines))
+    return dict(content=''.join(lines), filename="MnO.hkl")
 
 @app.callback(
     Output("download-LMO", "data"),
@@ -192,9 +196,12 @@ def download_MnO(n_clicks):
 )
 
 def download_LMO(n_clicks):
-    path = os.path.join(data_path,'LaMnO3.hkl')
-    data = open(path,'r')
-    return dict(content=data, filename="LaMnO3.hkl")
+    data_file = os.path.join(data_path, 'LaMnO3.hkl')
+    data = open(data_file, 'r', encoding='utf-8')
+    lines = data.readlines()
+    data.close()
+    print(lines)
+    return dict(content=''.join(lines), filename="LaMnO3.hkl")
         
 @app.callback(
     Output(component_id='ls-loading',component_property='children'),
