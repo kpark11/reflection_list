@@ -375,7 +375,7 @@ def update_output_container(file,indices):
                 return html.Div(className='chart-grid',children=html.Div(bar_plot1),style={'display':'flex'})
 
             else:
-                return '1. idk what is going on'
+                return data.loc[(data['h']==h) & (data['k']==k) & (data['l']==l)].index
         else:
             return '2. idk what is going on'
 
