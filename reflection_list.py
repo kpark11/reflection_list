@@ -172,7 +172,7 @@ def save_file(contents,name):
     Output(component_id='ls-loading',component_property='children'),
     [Input('upload','contents'),
      State('upload','filename')]
-    )
+)
 
 def update_upload_container(contents,name):    
     name = os.path.join(file_path, name)
@@ -205,7 +205,7 @@ def update_upload_container(contents,name):
     [Input(component_id='h',component_property='value'),
      Input(component_id='k',component_property='value'),
      Input(component_id='l',component_property='value')]
-     )
+)
 
 def update_hkl_container(h,k,l):
     if h == '' or k == '' or l == '' or h == '-' or k == '-' or l == '-':
@@ -218,7 +218,7 @@ def update_hkl_container(h,k,l):
     Output(component_id='ls-loading-2',component_property='children'),
     [Input(component_id='ls-loading',component_property='children'),
      Input(component_id='ls-loading-1',component_property='children')]
-     )
+)
 
 def update_output_container(file,indices):
     try:
@@ -226,9 +226,9 @@ def update_output_container(file,indices):
             data = pd.read_fwf(file)
             header = ['Pxx','Pxy','Pxz','Pyx','Pyy','Pyz','Pzx','Pzy','Pzz']
             
-            h = int(indices[0])
-            k = int(indices[1])
-            l = int(indices[2])
+            h = str(indices[0])
+            k = str(indices[1])
+            l = str(indices[2])
             h1 = indices[0]
             k1 = indices[1]
             l1 = indices[2]
