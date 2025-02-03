@@ -29,6 +29,8 @@ try:
     os.mkdir(file_path)
 except:
     print('already exists')
+    
+download_hkl = cwd+'\data'
 
 
 app = dash.Dash(external_stylesheets=[dbc.themes.LUX])
@@ -41,10 +43,33 @@ app.style = {'textAlign':'center','color':'#503D36','font-size':24}
 
 app.layout = html.Div([
     html.H1("Reflection List", style={'textAlign': 'center', 'color': '#3E57B0','font-size':50}),
+    
     html.Br(),
+    
     html.H2("Description:", style={'textAlign': 'center', 'color': '#FF8903'}),
+    
     html.P("Once you upload the .hkl file from Mag2Pol software, please wait. It is cleaning the text file.", 
            style={'textAlign':'center'}),
+    
+    dcc.Markdown("Here is the MnO and LaMnO<sub>3</sub> .hkl files if you would like to test it.",
+                 style={'textAlign':'center'}),
+    
+    html.Div(
+        dbc.Button('MnO.hkl file',
+                   href="/data",
+                   download="MnO.hkl",
+                   external_link=True,
+                   color="primary",),
+    
+        dbc.Button('LaMnO3.hkl file',
+                   href="/data",
+                   download="LaMnO3.hkl",
+                   external_link=True,
+                   color="primary",),
+        
+        style={'display':'inline-block'},
+        ),
+    
     html.P("You can visualize the polarization matrix by typing in the indices you want.",
           style={'textAlign':'center'}),
                        
@@ -137,8 +162,6 @@ def save_file(contents,name):
         return str(new_path)
     except:
         return str(new_path)
-
-
         
 @app.callback(
     Output(component_id='ls-loading',component_property='children'),
@@ -192,6 +215,8 @@ def update_hkl_container(h,k,l):
      )
 
 def update_output_container(file,indices):
+    file = file.split(' ')[-1]
+    file = os.path.join(file_path, file)
     try:
         if '_cleaned.txt' in file:
             data = pd.read_fwf(file)
